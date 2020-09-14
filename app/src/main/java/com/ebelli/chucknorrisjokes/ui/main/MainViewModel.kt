@@ -17,15 +17,16 @@ class MainViewModel(private val jokesRepository: JokesRepository, private val co
 
     fun getJokes(jokesNumber: Int) {
         viewModelScope.launch(coroutineContext) {
+            _jokes.postValue(Result.loading(data = null))
             try {
                 val jokes = jokesRepository.getJokes(jokesNumber)
                 if (jokes.value.isNullOrEmpty()) {
-                    _jokes.postValue(Result.error(null, ""))
+                    _jokes.postValue(Result.error(null, "Cannot retrieve jokes"))
                 } else {
                     _jokes.postValue(Result.success(jokes))
                 }
             } catch (e: Exception) {
-                _jokes.postValue(Result.error(null, ""))
+                _jokes.postValue(Result.error(null, e.toString()))
             }
         }
     }
