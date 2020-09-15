@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ebelli.chucknorrisjokes.ui.common.ViewModelFactory
+import com.ebelli.chucknorrisjokes.ui.main.JokesAdapter
 import com.ebelli.chucknorrisjokes.ui.main.MainViewModel
 import com.ebelli.chucknorrisjokes.ui.utils.Status
 import com.google.android.material.snackbar.Snackbar
@@ -15,10 +18,12 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
+    private val viewAdapter =  JokesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initRecyclerView()
     }
 
     override fun onStart() {
@@ -29,6 +34,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.getJokes(getRandomNumber())
     }
 
+
+    private fun initRecyclerView() {
+        val recyclerView = jokes_list
+        val viewManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+
+        recyclerView.apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+    }
 
     private fun setupObservers() {
         viewModel.jokes.observe(this, Observer {
@@ -48,6 +63,12 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Status.SUCCESS -> {
+                        it.data?.let {jokes ->
+                            viewAdapter.setData(jokes.value)
+                            viewAdapter.notifyDataSetChanged()
+                            jokes_list.visibility = View.VISIBLE
+                        }
+
                         progressBar.visibility = View.GONE
                     }
                 }
