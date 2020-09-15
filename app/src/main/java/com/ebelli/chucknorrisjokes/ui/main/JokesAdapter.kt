@@ -3,7 +3,7 @@ package com.ebelli.chucknorrisjokes.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ebelli.chucknorrisjokes.R
 import com.ebelli.chucknorrisjokes.data.models.Joke
@@ -16,7 +16,7 @@ class JokesAdapter: RecyclerView.Adapter<JokesAdapter.JokesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val jokesView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_joke, parent, false) as ConstraintLayout
+            .inflate(R.layout.item_joke, parent, false) as LinearLayout
 
         return JokesViewHolder(jokesView)
     }
